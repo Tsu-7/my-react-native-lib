@@ -75,7 +75,8 @@ const dataCategories = [
 export default function index(props) {
   const [selected, setSelected] = useState(null);
   const [checks, setChecks] = useState(['name 1-1', 'name 3-1']);
-  console.log('list', checks);
+  const [expands, setExpands] = useState(['name 1']);
+  console.log('list', expands);
   return (
     <View style={styles.container}>
       {/* <Picker
@@ -86,7 +87,13 @@ export default function index(props) {
         onSelect={setSelected}
         style={styles.picker}
       /> */}
-      <CheckboxTree data={dataCategories} checks={checks} onCheck={setChecks} />
+      <CheckboxTree
+        data={dataCategories}
+        checks={checks}
+        expands={expands}
+        onCheck={setChecks}
+        onExpand={setExpands}
+      />
     </View>
   );
 }
