@@ -22,7 +22,7 @@ var barheight;
 Platform.OS === 'ios' ? (barheight = 0) : (barheight = StatusBar.currentHeight);
 
 export default function index(props) {
-  const {label, data, isSearch, onSelect, style} = props;
+  const {label, data, isSearch, value, onSelect, style} = props;
 
   const [search, setSearch] = useState('');
   const [visible, setVisible] = useState(false);
@@ -40,7 +40,7 @@ export default function index(props) {
       <Text>{label}</Text>
       <TouchableOpacity onPress={_touchVisible}>
         <View style={styles.layout_touch}>
-          <Text>abc</Text>
+          <Text numberOfLines={1}>{value?.name}</Text>
           <Image
             source={{uri: `data:image/jpeg;base64,${icon_dropdown}`}}
             style={styles.icon_dropdown}
@@ -63,7 +63,11 @@ export default function index(props) {
                 ? dataFilter.map((item, index) => (
                     <TouchableOpacity
                       key={index}
-                      onPress={() => onSelect(data[index])}>
+                      onPress={() => {
+                        onSelect(dataFilter[index]);
+                        _touchVisible();
+                        setSearch('');
+                      }}>
                       <ListItem item={item} />
                     </TouchableOpacity>
                   ))
@@ -117,7 +121,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     backgroundColor: 'white',
-    height: height * 0.7,
+    maxHeight: height * 0.7,
     width: width,
     borderRadius: 20,
     paddingVertical: 30,

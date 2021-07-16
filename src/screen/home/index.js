@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Picker from '../../component/select_Picker/index';
+import CheckboxTree from '../../component/Categories/checkbox_tree';
 
 const dataPicker = [
   {
@@ -30,24 +31,62 @@ const dataPicker = [
   },
 ];
 
+const dataCategories = [
+  {
+    name: 'name 1',
+    children: [
+      {
+        name: 'name 1-1',
+        children: [
+          {
+            name: 'name 1-1-1',
+          },
+          {
+            name: 'name 1-1-2',
+          },
+        ],
+      },
+      {
+        name: 'name 1-2',
+      },
+    ],
+  },
+  {
+    name: 'name 2',
+    children: [
+      {
+        name: 'name 2-1',
+      },
+      {
+        name: 'name 2-2',
+      },
+    ],
+  },
+  {
+    name: 'name 3',
+    children: [
+      {
+        name: 'name 3-1',
+      },
+    ],
+  },
+];
+
 export default function index(props) {
   const [selected, setSelected] = useState(null);
-  console.log('___select: ', selected);
+  const [checks, setChecks] = useState(['name 1-1', 'name 3-1']);
+  console.log('list', checks);
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity onPress={() => props.navigation.navigate('Details')}>
-        <View style={{height: 60, width: 120, backgroundColor: 'lightblue'}}>
-          <Text>go to detail</Text>
-        </View>
-      </TouchableOpacity> */}
-      <Picker
+      {/* <Picker
         label="select Country"
         data={dataPicker}
         isSearch={true}
         value={selected}
         onSelect={setSelected}
         style={styles.picker}
-      />
+      /> */}
+      <CheckboxTree data={dataCategories} checks={checks} onCheck={setChecks} />
     </View>
   );
 }
