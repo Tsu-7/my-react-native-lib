@@ -1,18 +1,33 @@
+/* eslint-disable no-const-assign */
 /* eslint-disable curly */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import CheckBox from '@react-native-community/checkbox';
 import * as _ from 'lodash';
 import icon_img from './icon.png';
 
 export default function Tree_node(props) {
-  const {data, checks, onCheck, expands, onExpand} = props;
+  const {data, checks, onCheck, expands, onExpand, listParent} = props;
   const [name, setName] = React.useState(data.name ?? '');
 
+  // React.useEffect(() => {
+  //   init();
+  // }, [checks]);
+
+  // const init = async () => {
+  //   console.log(data.name, await childNode(data, []));
+  // };
+
   const handleCheck = async value => {
-    if (value) onCheck(Array.from(new Set(_.concat(checks, [name]))));
-    else onCheck(Array.from(new Set(_.remove(checks, e => e !== name))));
+    if (value) {
+      onCheck(Array.from(new Set(_.concat(checks, listParent, [name]))));
+    } else {
+      const removeData = await Array.from(
+        new Set(_.concat(await childNode(data, []), [name])),
+      );
+      onCheck(Array.from(new Set(_.difference(checks, removeData))));
+    }
   };
 
   const handleIcon = async () => {
@@ -21,16 +36,37 @@ export default function Tree_node(props) {
       : onExpand(Array.from(new Set(_.concat(expands, [name]))));
   };
 
+  const childNode = async (data, listData) => {
+    if (data.children) {
+      for (let index = 0; index < data.children.length; index++) {
+        const element = data.children[index];
+        listData = Array.from(
+          new Set(
+            _.concat(
+              listData,
+              [element.name],
+              await childNode(element, listData),
+            ),
+          ),
+        );
+      }
+    } else listData = Array.from(new Set(_.concat(listData, [data.name])));
+    return await listData;
+  };
+
   return (
     <View style={styles.node}>
       <View style={styles.text}>
-        <TouchableOpacity onPress={handleIcon}>
+        <TouchableOpacity onPress={() => handleIcon()}>
           <Image source={icon_img} style={styles.icon} />
         </TouchableOpacity>
-        <BouncyCheckbox
-          size={15}
-          isChecked={_.filter(checks, e => e === data.name).length > 0}
-          onPress={handleCheck}
+        <CheckBox
+          disabled={false}
+          value={_.filter(checks, e => e === data.name).length > 0}
+          onValueChange={v => {
+            console.log('v: ', v);
+            handleCheck(v);
+          }}
         />
         <Text>{name}</Text>
       </View>
@@ -44,6 +80,7 @@ export default function Tree_node(props) {
                 onCheck={onCheck}
                 expands={expands}
                 onExpand={onExpand}
+                listParent={_.concat(listParent, [name])}
               />
             ))
           : null

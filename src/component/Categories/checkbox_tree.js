@@ -9,16 +9,19 @@ export default function CheckboxTree(props) {
   return (
     <View style={{flex: 1, marginLeft: -20}}>
       {data.length > 0
-        ? data.map((e, index) => (
-            <Tree_node
-              data={e}
-              key={index}
-              checks={checks}
-              onCheck={onCheck}
-              expands={expands}
-              onExpand={onExpand}
-            />
-          ))
+        ? data.map((e, index) => {
+            return (
+              <Tree_node
+                data={e}
+                key={index}
+                checks={checks}
+                onCheck={onCheck}
+                expands={expands}
+                onExpand={onExpand}
+                listParent={[e.name]}
+              />
+            );
+          })
         : null}
     </View>
   );

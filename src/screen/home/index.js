@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Picker from '../../component/select_Picker/index';
 import CheckboxTree from '../../component/Categories/checkbox_tree';
+import * as _ from 'lodash';
 
 const dataPicker = [
   {
@@ -73,20 +74,14 @@ const dataCategories = [
 ];
 
 export default function index(props) {
-  const [selected, setSelected] = useState(null);
   const [checks, setChecks] = useState(['name 1-1', 'name 3-1']);
   const [expands, setExpands] = useState(['name 1']);
-  console.log('list', expands);
+
+  // React.useEffect(() => {
+  // }, [checks]);
+  console.log('categories', checks);
   return (
     <View style={styles.container}>
-      {/* <Picker
-        label="select Country"
-        data={dataPicker}
-        isSearch={true}
-        value={selected}
-        onSelect={setSelected}
-        style={styles.picker}
-      /> */}
       <CheckboxTree
         data={dataCategories}
         checks={checks}
