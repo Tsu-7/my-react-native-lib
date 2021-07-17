@@ -21,7 +21,13 @@ export default function Tree_node(props) {
 
   const handleCheck = async value => {
     if (value) {
-      onCheck(Array.from(new Set(_.concat(checks, listParent, [name]))));
+      onCheck(
+        Array.from(
+          new Set(
+            _.concat(checks, listParent, [name], await childNode(data, [])),
+          ),
+        ),
+      );
     } else {
       const removeData = await Array.from(
         new Set(_.concat(await childNode(data, []), [name])),
